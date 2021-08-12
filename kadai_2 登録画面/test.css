@@ -1,0 +1,30 @@
+table td {
+border:1px solid #000;
+padding-left:10px;
+}
+
+table{
+	border-collapse:collapse;
+	margin-left:10px!important;
+}
+th{
+	border:1px solid #000;
+	background-color: yellow;
+	text-align:left;
+	padding-left:10px!important;
+}
+
+.blue{
+	color: blue;
+}
+
+.title{
+	color: blue;
+	font-weight:800;
+	font-size:20pt;
+	background-color: yellow;
+	text-align: center;
+}
+
+#eye,#eye2{
+display:none;}

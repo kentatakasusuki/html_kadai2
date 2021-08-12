@@ -1,0 +1,109 @@
+<html lang="ja">
+
+<head>  
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>付箋</title>
+    <link href="./test.css" rel="stylesheet">
+	<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script> 
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+	<span class="husen">
+		<div class="drag-and-drop" id="red-box"><p>ここに文章</p></div>
+		<div class="drag-and-drop" id="blue-box"><p>ここに文章</p></div>
+		<div class="drag-and-drop" id="yellow-box"><p>ここに文章</p></div>
+	</span>
+
+	<div class="box1">
+		<span class="box-title">サイズ</span>
+		<p><input type="text" name="name" size="15" style=border:none;></p>
+	</div>
+
+<script>
+	(function(){
+
+		//要素の取得
+		var elements = document.getElementsByClassName("drag-and-drop");
+	
+		//要素内のクリックされた位置を取得するグローバル（のような）変数
+		var x;
+		var y;
+	
+		//マウスが要素内で押されたとき、又はタッチされたとき発火
+		for(var i = 0; i < elements.length; i++) {
+			elements[i].addEventListener("mousedown", mdown, false);
+			elements[i].addEventListener("touchstart", mdown, false);
+		}
+	
+		//マウスが押された際の関数
+		function mdown(e) {
+	
+			//クラス名に .drag を追加
+			this.classList.add("drag");
+	
+			//タッチデイベントとマウスのイベントの差異を吸収
+			if(e.type === "mousedown") {
+				var event = e;
+			} else {
+				var event = e.changedTouches[0];
+			}
+	
+			//要素内の相対座標を取得
+			x = event.pageX - this.offsetLeft;
+			y = event.pageY - this.offsetTop;
+	
+			//ムーブイベントにコールバック
+			document.body.addEventListener("mousemove", mmove, false);
+			document.body.addEventListener("touchmove", mmove, false);
+		}
+	
+		//マウスカーソルが動いたときに発火
+		function mmove(e) {
+	
+			//ドラッグしている要素を取得
+			var drag = document.getElementsByClassName("drag")[0];
+	
+			//同様にマウスとタッチの差異を吸収
+			if(e.type === "mousemove") {
+				var event = e;
+			} else {
+				var event = e.changedTouches[0];
+			}
+	
+			//フリックしたときに画面を動かさないようにデフォルト動作を抑制
+			e.preventDefault();
+	
+			//マウスが動いた場所に要素を動かす
+			drag.style.top = event.pageY - y + "px";
+			drag.style.left = event.pageX - x + "px";
+	
+			//マウスボタンが離されたとき、またはカーソルが外れたとき発火
+			drag.addEventListener("mouseup", mup, false);
+			document.body.addEventListener("mouseleave", mup, false);
+			drag.addEventListener("touchend", mup, false);
+			document.body.addEventListener("touchleave", mup, false);
+	
+		}
+	
+		//マウスボタンが上がったら発火
+		function mup(e) {
+			var drag = document.getElementsByClassName("drag")[0];
+	
+			//ムーブベントハンドラの消去
+			document.body.removeEventListener("mousemove", mmove, false);
+			drag.removeEventListener("mouseup", mup, false);
+			document.body.removeEventListener("touchmove", mmove, false);
+			drag.removeEventListener("touchend", mup, false);
+	
+			//クラス名 .drag も消す
+			drag.classList.remove("drag");
+		}
+	
+	})()
+</script>
+	
+
+
